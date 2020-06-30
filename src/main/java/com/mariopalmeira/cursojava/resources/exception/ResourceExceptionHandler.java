@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.mariopalmeira.cursojava.services.exception.DataIntegrityException;
 import com.mariopalmeira.cursojava.services.exception.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -23,5 +24,11 @@ public class ResourceExceptionHandler {
 		StandardError erro = new StandardError(HttpStatus.NOT_FOUND.value(), excecao.getMessage(), System.currentTimeMillis());
 		//O status do retorno vai ser 404 e no corpo as informações da exceção
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+	}
+	
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException excecao, HttpServletRequest requisicao){
+		StandardError erro = new StandardError(HttpStatus.BAD_REQUEST.value(), excecao.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
 }
