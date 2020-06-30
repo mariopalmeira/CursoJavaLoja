@@ -15,8 +15,20 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaDAO categoriaDao;
 	
-	public Optional<Categoria> buscaPorId(Integer id) {
+	public Optional<Categoria> buscar(Integer id) {
 		Optional<Categoria> categoria = categoriaDao.findById(id);
 		return Optional.of(categoria.orElseThrow(() -> new ObjectNotFoundException("Categoria não encontrada.")));
+	}
+	
+	public Categoria incluir(Categoria categoria) {
+		//Garantir que é um objeto novo
+		categoria.setId(null);
+		return categoriaDao.save(categoria);
+	}
+	
+	public Categoria editar(Categoria categoria) {
+		//Garantir que o registro existe
+		buscar(categoria.getId());
+		return categoriaDao.save(categoria);
 	}
 }
