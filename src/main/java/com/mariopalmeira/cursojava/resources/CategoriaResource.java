@@ -37,6 +37,7 @@ public class CategoriaResource {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> incluir(@Valid @RequestBody CategoriaDTO categoriaDto){
+		//Converte objeto DTO em objeto comum
 		Categoria categoria = categoriaService.converteDto(categoriaDto);
 		Categoria novaCategoria = categoriaService.incluir(categoria);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novaCategoria.getId()).toUri();
@@ -44,7 +45,8 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.PUT)
-	public ResponseEntity<Void> editar(@RequestBody Categoria categoria, @PathVariable Integer id){
+	public ResponseEntity<Void> editar(@Valid @RequestBody CategoriaDTO categoriaDto, @PathVariable Integer id){
+		Categoria categoria = categoriaService.converteDto(categoriaDto);
 		categoria.setId(id);
 		categoria = categoriaService.editar(categoria);
 		return ResponseEntity.noContent().build();
