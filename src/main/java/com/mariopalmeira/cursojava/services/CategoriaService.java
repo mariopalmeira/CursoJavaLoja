@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.mariopalmeira.cursojava.dao.CategoriaDAO;
@@ -47,4 +50,9 @@ public class CategoriaService {
 	public List<Categoria> buscarTodos() {
 		return categoriaDao.findAll();
 	}
+	
+	public Page<Categoria> paginar(Integer pagina, Integer porPagina, String order, String direcao) {
+		PageRequest paginas = PageRequest.of(pagina, porPagina, Direction.valueOf(direcao), order);
+		return categoriaDao.findAll(paginas);
+	}	
 }

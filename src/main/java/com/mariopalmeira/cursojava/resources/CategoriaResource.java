@@ -6,11 +6,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -51,6 +53,7 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> buscarTodos() {
 		//Busca uma lista de categorias no formato normal
@@ -59,5 +62,14 @@ public class CategoriaResource {
 		//no caso transformando um objeto tipo categoria em categoriaDTO, usando o construtor com parâmetros com função de callback, e depois convertendo essa stream de categorias em coleção List novamente
 		List<CategoriaDTO> lista = categorias.stream().map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(lista);
+	}
+	
+	//O value pode ser um parâmetro, um endpoint específico(abaixo)
+	@RequestMapping(value="/pagina", method=RequestMethod.GET)
+	public ResponseEntity<Page<CategoriaDTO>> paginar(@RequestParam(name="pagina", defaultValue="0")Integer pagina, @RequestParam(name="porPagina", defaultValue="10")Integer porPagina, 
+			@RequestParam(name="ordenar", defaultValue="nome")String order, @RequestParam(name="direcao", defaultValue="ASC")String direcao){
+		Page<Categoria> categorias = categoriaService.paginar(pagina, porPagina, order, direcao);
+		Page<CategoriaDTO> paginas = categorias.map(categoria -> new CategoriaDTO(categoria));
+		return ResponseEntity.ok().body(paginas);
 	}
 }

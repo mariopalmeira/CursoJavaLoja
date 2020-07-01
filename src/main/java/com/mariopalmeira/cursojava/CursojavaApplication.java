@@ -62,6 +62,17 @@ public class CursojavaApplication implements CommandLineRunner {
 		Categoria categoriaUm = new Categoria(null, "OTTO");
 		Categoria categoriaDois = new Categoria(null, "DIESEL");
 		
+		Categoria categoriaTres = new Categoria(null, "FUNILARIA");
+		Categoria categoriaQuatro = new Categoria(null, "ELÉTRICA");
+		Categoria categoriaCinco = new Categoria(null, "PNEUS");
+		Categoria categoriaSeis = new Categoria(null, "RODAS");
+		Categoria categoriaSete = new Categoria(null, "ACESSÓRIOS");
+		Categoria categoriaOito = new Categoria(null, "PEÇAS ORIGINAIS");
+		Categoria categoriaNove = new Categoria(null, "PEÇAS PARALELAS");
+		Categoria categoriaDez = new Categoria(null, "PEÇAS USADAS");
+		Categoria categoriaOnze = new Categoria(null, "FLUÍDOS");
+		Categoria categoriaDoze = new Categoria(null, "SUSPENSÃO");
+		
 		Produto produtoUm = new Produto(null, "Jogo Vela de ignição" , 350.00);
 		Produto produtoDois = new Produto(null, "Rolamento de roda" , 150.00);
 		Produto produtoTres = new Produto(null, "Jogo Cabo de vela" , 230.00);
@@ -143,7 +154,7 @@ public class CursojavaApplication implements CommandLineRunner {
 		clienteTres.getEndereco().addAll(Arrays.asList(enderecoTres));
 		clienteQuatro.getEndereco().addAll(Arrays.asList(enderecoQuatro));
 		
-		categoriaDAO.saveAll(Arrays.asList(categoriaUm, categoriaDois));
+		categoriaDAO.saveAll(Arrays.asList(categoriaUm, categoriaDois, categoriaTres, categoriaQuatro, categoriaCinco, categoriaSeis, categoriaSete, categoriaOito, categoriaNove, categoriaDez, categoriaOnze, categoriaDoze));
 		produtoDAO.saveAll(Arrays.asList(produtoUm, produtoDois, produtoTres));
 		estadoDAO.saveAll(Arrays.asList(estadoUm, estadoDois));
 		cidadeDAO.saveAll(Arrays.asList(cidadeUm, cidadeDois, cidadeTres, cidadeQuatro));
