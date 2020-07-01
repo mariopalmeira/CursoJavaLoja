@@ -1,7 +1,9 @@
 package com.mariopalmeira.cursojava.resources;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mariopalmeira.cursojava.domain.Categoria;
+import com.mariopalmeira.cursojava.dto.CategoriaDTO;
 import com.mariopalmeira.cursojava.services.CategoriaService;
 
 @RestController
@@ -23,7 +26,7 @@ public class CategoriaResource {
 	private CategoriaService categoriaService;
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> funcionando(@PathVariable Integer id) {
+	public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
 		Optional<Categoria> categoria = categoriaService.buscar(id);
 		return ResponseEntity.ok().body(categoria);
 	}
@@ -46,5 +49,15 @@ public class CategoriaResource {
 	public ResponseEntity<Void> excluir(@PathVariable Integer id){
 		categoriaService.excluir(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> buscarTodos() {
+		//Busca uma lista de categorias no formato normal
+		List<Categoria> categorias = categoriaService.buscarTodos();
+		//Nova lista, mas agora de objetos DTO, recebe: uma stream de categorias, passando pelo map, que usa num elemento da lista a função de callback
+		//no caso transformando um objeto tipo categoria em categoriaDTO, usando o construtor com parâmetros com função de callback, e depois convertendo essa stream de categorias em coleção List novamente
+		List<CategoriaDTO> lista = categorias.stream().map(categoria -> new CategoriaDTO(categoria)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(lista);
 	}
 }
