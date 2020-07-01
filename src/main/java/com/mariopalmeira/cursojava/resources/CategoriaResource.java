@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +36,10 @@ public class CategoriaResource {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> incluir(@RequestBody Categoria categoria){
-		categoria = categoriaService.incluir(categoria);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(categoria.getId()).toUri();
+	public ResponseEntity<Void> incluir(@Valid @RequestBody CategoriaDTO categoriaDto){
+		Categoria categoria = categoriaService.converteDto(categoriaDto);
+		Categoria novaCategoria = categoriaService.incluir(categoria);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novaCategoria.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	

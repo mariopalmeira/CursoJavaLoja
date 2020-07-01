@@ -2,12 +2,18 @@ package com.mariopalmeira.cursojava.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import com.mariopalmeira.cursojava.domain.Categoria;
 
 public class CategoriaDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Integer id;
+	
+	@NotEmpty(message="Preenchimento obrigatório.")
+	@Size(min=5, max=25, message="O nome da categoria deve ter entre 5 e 25 caracteres.")
 	private String nome;
 	
 	public CategoriaDTO() {}

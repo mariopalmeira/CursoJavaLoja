@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.mariopalmeira.cursojava.dao.CategoriaDAO;
 import com.mariopalmeira.cursojava.domain.Categoria;
+import com.mariopalmeira.cursojava.dto.CategoriaDTO;
 import com.mariopalmeira.cursojava.services.exception.DataIntegrityException;
 import com.mariopalmeira.cursojava.services.exception.ObjectNotFoundException;
 
@@ -55,4 +56,9 @@ public class CategoriaService {
 		PageRequest paginas = PageRequest.of(pagina, porPagina, Direction.valueOf(direcao), order);
 		return categoriaDao.findAll(paginas);
 	}	
+	
+	public Categoria converteDto(CategoriaDTO categoriaDto) {
+		Categoria categoria = new Categoria(categoriaDto.getId(), categoriaDto.getNome());
+		return categoria;
+	}
 }
