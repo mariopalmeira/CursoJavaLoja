@@ -38,7 +38,7 @@ public class CategoriaResource {
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> incluir(@Valid @RequestBody CategoriaDTO categoriaDto){
 		//Converte objeto DTO em objeto comum
-		Categoria categoria = categoriaService.converteDto(categoriaDto);
+		Categoria categoria = categoriaService.categoriaDtoEmCategoria(categoriaDto);
 		Categoria novaCategoria = categoriaService.incluir(categoria);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novaCategoria.getId()).toUri();
 		return ResponseEntity.created(uri).build();
@@ -46,9 +46,9 @@ public class CategoriaResource {
 	
 	@RequestMapping(value = "/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> editar(@Valid @RequestBody CategoriaDTO categoriaDto, @PathVariable Integer id){
-		Categoria categoria = categoriaService.converteDto(categoriaDto);
+		Categoria categoria = categoriaService.categoriaDtoEmCategoria(categoriaDto);
 		categoria.setId(id);
-		categoria = categoriaService.editar(categoria);
+		categoriaService.editar(categoria);
 		return ResponseEntity.noContent().build();
 	}
 	
@@ -57,7 +57,6 @@ public class CategoriaResource {
 		categoriaService.excluir(id);
 		return ResponseEntity.noContent().build();
 	}
-	
 
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<CategoriaDTO>> buscarTodos() {
@@ -72,7 +71,7 @@ public class CategoriaResource {
 	//O value pode ser um parâmetro, um endpoint específico(abaixo)
 	@RequestMapping(value="/pagina", method=RequestMethod.GET)
 	public ResponseEntity<Page<CategoriaDTO>> paginar(@RequestParam(name="pagina", defaultValue="0")Integer pagina, @RequestParam(name="porPagina", defaultValue="10")Integer porPagina, 
-			@RequestParam(name="ordenar", defaultValue="nome")String order, @RequestParam(name="direcao", defaultValue="ASC")String direcao){
+			@RequestParam(name="ordem", defaultValue="nome")String order, @RequestParam(name="direcao", defaultValue="ASC")String direcao){
 		Page<Categoria> categorias = categoriaService.paginar(pagina, porPagina, order, direcao);
 		Page<CategoriaDTO> paginas = categorias.map(categoria -> new CategoriaDTO(categoria));
 		return ResponseEntity.ok().body(paginas);

@@ -57,7 +57,7 @@ public class CategoriaService {
 		return categoriaDao.findAll(paginas);
 	}	
 	
-	public Categoria converteDto(CategoriaDTO categoriaDto) {
+	public Categoria categoriaDtoEmCategoria(CategoriaDTO categoriaDto) {
 		Categoria categoria = new Categoria(categoriaDto.getId(), categoriaDto.getNome());
 		return categoria;
 	}
