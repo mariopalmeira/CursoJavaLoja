@@ -2,20 +2,35 @@ package com.mariopalmeira.cursojava.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import com.mariopalmeira.cursojava.services.validation.ClienteValidation;
+
+@ClienteValidation
 public class ClienteInsereDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty
 	private String nome;
+	
+	@NotEmpty
+	@Email
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
 	
+	@NotEmpty
 	private String logradouro;
+	@NotEmpty
 	private String numero;
 	private String complemento;
+	@NotEmpty
 	private String bairro;
+	@NotEmpty
 	private String cep;
 	
+	@NotEmpty
 	private String telefoneUm;
 	private String telefoneDois;
 	private String telefoneTres;
