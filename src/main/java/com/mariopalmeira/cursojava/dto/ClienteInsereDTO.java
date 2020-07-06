@@ -5,9 +5,9 @@ import java.io.Serializable;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-import com.mariopalmeira.cursojava.services.validation.ClienteValidation;
+import com.mariopalmeira.cursojava.services.validation.ClienteInsereValida;
 
-@ClienteValidation
+@ClienteInsereValida
 public class ClienteInsereDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
