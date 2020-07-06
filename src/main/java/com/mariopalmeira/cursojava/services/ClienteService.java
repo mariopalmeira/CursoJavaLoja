@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -18,6 +19,7 @@ import com.mariopalmeira.cursojava.domain.Endereco;
 import com.mariopalmeira.cursojava.domain.enums.TipoCliente;
 import com.mariopalmeira.cursojava.dto.ClienteDTO;
 import com.mariopalmeira.cursojava.dto.ClienteInsereDTO;
+import com.mariopalmeira.cursojava.services.exception.DataIntegrityException;
 import com.mariopalmeira.cursojava.services.exception.ObjectNotFoundException;
 
 @Service
@@ -54,7 +56,12 @@ public class ClienteService {
 	}
 	
 	public void excluir(Integer id) {
-		return clienteDAO.delete(id);
+		buscaPorId(id);
+		try {
+			clienteDAO.deleteById(id);
+		}catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Esse cliente tem pedidos associados.");
+		}
 	}
 	
 	public Page<Cliente> paginar(Integer pagina, Integer porPagina, String ordem, String direcao){
