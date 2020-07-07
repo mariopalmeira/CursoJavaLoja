@@ -14,7 +14,6 @@ import org.springframework.web.servlet.HandlerMapping;
 import com.mariopalmeira.cursojava.dao.ClienteDAO;
 import com.mariopalmeira.cursojava.domain.Cliente;
 import com.mariopalmeira.cursojava.dto.ClienteDTO;
-import com.mariopalmeira.cursojava.dto.ClienteInsereDTO;
 import com.mariopalmeira.cursojava.resources.exception.FieldError;
 
 public class ClienteEditaValidator implements ConstraintValidator<ClienteEditaValida, ClienteDTO> {

@@ -61,7 +61,6 @@ public class CursojavaApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Categoria categoriaUm = new Categoria(null, "OTTO");
 		Categoria categoriaDois = new Categoria(null, "DIESEL");
-		
 		Categoria categoriaTres = new Categoria(null, "FUNILARIA");
 		Categoria categoriaQuatro = new Categoria(null, "ELÉTRICA");
 		Categoria categoriaCinco = new Categoria(null, "PNEUS");
@@ -73,9 +72,48 @@ public class CursojavaApplication implements CommandLineRunner {
 		Categoria categoriaOnze = new Categoria(null, "FLUÍDOS");
 		Categoria categoriaDoze = new Categoria(null, "SUSPENSÃO");
 		
-		Produto produtoUm = new Produto(null, "Jogo Vela de ignição" , 350.00);
-		Produto produtoDois = new Produto(null, "Rolamento de roda" , 150.00);
-		Produto produtoTres = new Produto(null, "Jogo Cabo de vela" , 230.00);
+		Produto produtoUm = new Produto(null, "Jogo Vela de ignição" , 350.00);//1
+		Produto produtoDois = new Produto(null, "Rolamento de roda" , 150.00);//1,2,9
+		Produto produtoTres = new Produto(null, "Jogo Cabo de vela" , 230.00);//1
+		Produto produtoQuatro = new Produto(null, "Jogo Parafuso de roda" , 150.00);//1,6,9
+		Produto produtoCinco = new Produto(null, "Filtro de Combustível BMW" , 500.00);//1,8,11
+		Produto produtoSeis = new Produto(null, "Kit Limpador de Parabrisa" , 235.00);//1,2,9
+		Produto produtoSete = new Produto(null, "Parafuso Especial de Roda" , 154.00);//1,2,9,6
+		Produto produtoOito = new Produto(null, "Sensor de Rotação VHC" , 362.00);//1,8
+		Produto produtoNove = new Produto(null, "Kit Reparo Freio Traseiro" , 402.00);//1,9
+		Produto produtoDez = new Produto(null, "Litro Liquido de Arrefecimento" , 115.00);//1,2,11
+		Produto produtoOnze = new Produto(null, "Cubo de Roda Audi" , 980.00);//1,8
+		Produto produtoDoze = new Produto(null, "Bomba Ar Condicionado" , 2115.00);//1,7,10
+		Produto produtoTreze = new Produto(null, "Kit Mangueiras Audi" , 1441.00);//1,8,11
+		
+		//Relacionamento de produtos com a categoria
+		categoriaUm.getProduto().addAll(Arrays.asList(produtoUm,produtoDois,produtoTres, produtoQuatro, produtoCinco, produtoSeis, produtoSete, produtoOito, produtoNove, produtoDez, produtoOnze, produtoDoze, produtoTreze));
+		categoriaDois.getProduto().addAll(Arrays.asList(produtoDois, produtoSeis, produtoSete, produtoDez));
+		categoriaTres.getProduto().addAll(Arrays.asList());
+		categoriaQuatro.getProduto().addAll(Arrays.asList());
+		categoriaCinco.getProduto().addAll(Arrays.asList());
+		categoriaSeis.getProduto().addAll(Arrays.asList(produtoQuatro, produtoSete));
+		categoriaSete.getProduto().addAll(Arrays.asList(produtoDoze));
+		categoriaOito.getProduto().addAll(Arrays.asList(produtoCinco, produtoOito, produtoOnze, produtoTreze));
+		categoriaNove.getProduto().addAll(Arrays.asList(produtoDois, produtoQuatro, produtoSeis, produtoSete, produtoNove));
+		categoriaDez.getProduto().addAll(Arrays.asList(produtoDoze));
+		categoriaOnze.getProduto().addAll(Arrays.asList(produtoCinco, produtoDez, produtoTreze));
+		categoriaDoze.getProduto().addAll(Arrays.asList());
+		
+		//Relacionamento de categoria com o produto
+		produtoUm.getCategoria().addAll(Arrays.asList(categoriaUm));
+		produtoDois.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaDois, categoriaNove));
+		produtoTres.getCategoria().addAll(Arrays.asList(categoriaUm));
+		produtoQuatro.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaSeis, categoriaNove));
+		produtoCinco.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaOito, categoriaOnze));
+		produtoSeis.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaDois, categoriaNove));
+		produtoSete.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaDois, categoriaSeis, categoriaNove));
+		produtoOito.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaOito));
+		produtoNove.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaNove));
+		produtoDez.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaDois, categoriaOnze));
+		produtoOnze.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaOito));
+		produtoDoze.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaSete, categoriaDez));
+		produtoTreze.getCategoria().addAll(Arrays.asList(categoriaUm, categoriaOito, categoriaOnze));
 		
 		Estado estadoUm = new Estado(null, "São Paulo", "SP");
 		Estado estadoDois = new Estado(null, "Rio Grande do Sul", "RS");
@@ -155,7 +193,7 @@ public class CursojavaApplication implements CommandLineRunner {
 		clienteQuatro.getEndereco().addAll(Arrays.asList(enderecoQuatro));
 		
 		categoriaDAO.saveAll(Arrays.asList(categoriaUm, categoriaDois, categoriaTres, categoriaQuatro, categoriaCinco, categoriaSeis, categoriaSete, categoriaOito, categoriaNove, categoriaDez, categoriaOnze, categoriaDoze));
-		produtoDAO.saveAll(Arrays.asList(produtoUm, produtoDois, produtoTres));
+		produtoDAO.saveAll(Arrays.asList(produtoUm, produtoDois, produtoTres, produtoQuatro, produtoCinco, produtoSeis, produtoSete, produtoOito, produtoNove, produtoDez, produtoOnze, produtoDoze, produtoTreze));
 		estadoDAO.saveAll(Arrays.asList(estadoUm, estadoDois));
 		cidadeDAO.saveAll(Arrays.asList(cidadeUm, cidadeDois, cidadeTres, cidadeQuatro));
 		clienteDAO.saveAll(Arrays.asList(clienteUm, clienteDois, clienteTres, clienteQuatro));
