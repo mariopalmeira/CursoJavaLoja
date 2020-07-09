@@ -71,6 +71,7 @@ public class ClienteService {
 	
 	public Cliente clienteDtoEmCliente(ClienteDTO clienteDto, Optional<Cliente> clienteOptional) {
 		Cliente cliente = null;
+		//Pegando um objeto do optional 
 		if(clienteOptional.isPresent()) {
 			cliente = clienteOptional.get();
 			cliente.setNome(clienteDto.getNome());
