@@ -11,6 +11,7 @@ import com.mariopalmeira.cursojava.dao.ItemPedidoDAO;
 import com.mariopalmeira.cursojava.dao.PagamentoDAO;
 import com.mariopalmeira.cursojava.dao.PedidoDAO;
 import com.mariopalmeira.cursojava.dao.ProdutoDAO;
+import com.mariopalmeira.cursojava.domain.Cliente;
 import com.mariopalmeira.cursojava.domain.ItemPedido;
 import com.mariopalmeira.cursojava.domain.PagamentoBoleto;
 import com.mariopalmeira.cursojava.domain.Pedido;
@@ -33,6 +34,9 @@ public class PedidoService {
 	@Autowired
 	private ItemPedidoDAO itemPedidoDAO;
 	
+	@Autowired
+	private ClienteService clienteService;
+	
 	public Optional<Pedido> buscaPedidoPorId(Integer id){
 		Optional<Pedido> pedido = pedidoDAO.findById(id);
 		return Optional.of(pedido.orElseThrow(() -> new ObjectNotFoundException("Pedido não encontrado")));
@@ -41,7 +45,16 @@ public class PedidoService {
 	public Pedido incluir(Pedido pedido) {
 		//Garantir que realmente vai incluir um novo pedido
 		pedido.setId(null);
-		pedido.setInstante(new Date());
+		Calendar calendario = Calendar.getInstance();
+		Date agora = calendario.getTime();
+		pedido.setInstante(agora);
+
+		Optional<Cliente> clienteOptional = clienteService.buscaPorId(pedido.getCliente().getId());
+		if(clienteOptional.isPresent()) {
+			Cliente cliente = clienteOptional.get();
+			pedido.setCliente(cliente);
+		}
+
 		pedido.getPagamento().setEstadoPagamento(EstadoPagamento.PENDENTE);
 		pedido.getPagamento().setPedido(pedido);
 		if(pedido.getPagamento() instanceof PagamentoBoleto) {
@@ -56,17 +69,20 @@ public class PedidoService {
 		}
 		pedido = pedidoDAO.save(pedido);
 		pagamentoDAO.save(pedido.getPagamento());
+		
 		for(ItemPedido itemPedido : pedido.getItemPedido()) {
 			itemPedido.setDesconto(0.0);
 			
 			Optional<Produto> produtoOptional = produtoDAO.findById(itemPedido.getProduto().getId());
 			if(produtoOptional.isPresent()) {
 				Produto produto = produtoOptional.get();
+				itemPedido.setProduto(produto);
 				itemPedido.setPreco(produto.getPreco());
 			}
 			itemPedido.setPedido(pedido);
 		}
 		itemPedidoDAO.saveAll(pedido.getItemPedido());
+		System.out.println(pedido);
 		return pedido;
 	}
 }

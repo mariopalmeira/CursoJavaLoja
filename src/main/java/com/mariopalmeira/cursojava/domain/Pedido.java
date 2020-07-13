@@ -1,8 +1,11 @@
 package com.mariopalmeira.cursojava.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,12 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Pedido implements Serializable{ 
 	private static final long serialVersionUID = 1L;
 	
@@ -32,16 +31,13 @@ public class Pedido implements Serializable{
 	@JsonFormat(pattern="dd/MM/yyyy HH:mm")
 	private Date instante;	
 	
-	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, mappedBy="pedido")
 	private Pagamento pagamento;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="endereco_entrega_id")
 	private Endereco enderecoEntrega;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
@@ -138,5 +134,40 @@ public class Pedido implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("Pedido No.: ");
+		builder.append(id);
+		builder.append(" - Cliente: ");
+		builder.append(getCliente().getNome());
+		builder.append(" - Documento: ");
+		builder.append(getCliente().getCpfOuCnpj());
+		builder.append(" - Incluído em: ");
+		builder.append(sdf.format(instante));
+		builder.append("\n\n");
+		builder.append("O pagamento encontra-se: ");
+		builder.append(getPagamento().getEstadoPagamento());
+		builder.append("\n\n");
+		for(ItemPedido item : getItemPedido()) {
+			builder.append("- ");
+			builder.append(item.getProduto().getNome());
+			builder.append(" | Quantidade: ");
+			builder.append(item.getQuantidade());
+			builder.append(" | Preço unit.: ");
+			builder.append(nf.format(item.getPreco()));
+			builder.append(" | Subtotal: ");
+			builder.append(nf.format(item.getSubTotal()));		
+			builder.append("\n");
+		}
+		builder.append("\n\n");
+		builder.append("Total: ");
+		builder.append(nf.format(getTotal()));
+		return builder.toString();
+	}
 }

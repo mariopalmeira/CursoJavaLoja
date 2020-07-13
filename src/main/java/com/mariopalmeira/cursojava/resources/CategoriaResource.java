@@ -37,7 +37,7 @@ public class CategoriaResource {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> incluir(@Valid @RequestBody CategoriaDTO categoriaDto){
-		//Converte objeto DTO em objeto comum
+		//Converte objeto DTO em objeto
 		Categoria categoria = categoriaService.categoriaDtoEmCategoria(categoriaDto);
 		Categoria novaCategoria = categoriaService.incluir(categoria);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(novaCategoria.getId()).toUri();
