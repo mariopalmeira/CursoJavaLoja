@@ -37,6 +37,9 @@ public class PedidoService {
 	@Autowired
 	private ClienteService clienteService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public Optional<Pedido> buscaPedidoPorId(Integer id){
 		Optional<Pedido> pedido = pedidoDAO.findById(id);
 		return Optional.of(pedido.orElseThrow(() -> new ObjectNotFoundException("Pedido não encontrado")));
@@ -82,7 +85,7 @@ public class PedidoService {
 			itemPedido.setPedido(pedido);
 		}
 		itemPedidoDAO.saveAll(pedido.getItemPedido());
-		System.out.println(pedido);
+		emailService.enviaConfirmacaoPedido(pedido);
 		return pedido;
 	}
 }
