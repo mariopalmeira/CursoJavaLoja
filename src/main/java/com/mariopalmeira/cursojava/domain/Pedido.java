@@ -142,6 +142,7 @@ public class Pedido implements Serializable{
 		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 		
 		StringBuilder builder = new StringBuilder();
+		builder.append("\n\n");
 		builder.append("Pedido No.: ");
 		builder.append(id);
 		builder.append(" - Cliente: ");
