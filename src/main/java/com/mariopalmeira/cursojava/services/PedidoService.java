@@ -37,8 +37,8 @@ public class PedidoService {
 	@Autowired
 	private ClienteService clienteService;
 	
-	@Autowired
-	private EmailService emailService;
+//	@Autowired
+//	private EmailService emailService;
 	
 	public Optional<Pedido> buscaPedidoPorId(Integer id){
 		Optional<Pedido> pedido = pedidoDAO.findById(id);
@@ -85,7 +85,7 @@ public class PedidoService {
 			itemPedido.setPedido(pedido);
 		}
 		itemPedidoDAO.saveAll(pedido.getItemPedido());
-		emailService.enviaConfirmacaoPedido(pedido);
+		System.out.println(pedido);
 		return pedido;
 	}
 }
