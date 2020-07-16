@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mariopalmeira.cursojava.dao.CategoriaDAO;
@@ -51,6 +52,8 @@ public class DBService {
 	private PagamentoDAO pagamentoDAO;
 	@Autowired
 	private ItemPedidoDAO itemPedidoDAO;
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	public void instantiateTestDatabase() throws ParseException {
 		Categoria categoriaUm = new Categoria(null, "OTTO");
@@ -117,10 +120,10 @@ public class DBService {
 		Cidade cidadeTres = new Cidade(null, "Porto Alegre", estadoDois);
 		Cidade cidadeQuatro = new Cidade(null, "Caxias do Sul", estadoDois);
 		
-		Cliente clienteUm = new Cliente(null, "Cliente UM", "clienteum@mail.com", "11122233344", TipoCliente.PESSOAFISICA);
-		Cliente clienteDois = new Cliente(null, "Cliente DOIS", "clientedois@mail.com", "22233344455", TipoCliente.PESSOAFISICA);
-		Cliente clienteTres = new Cliente(null, "Cliente TRES", "clientetres@mail.com", "33444555000166", TipoCliente.PESSOAJURIDICA);
-		Cliente clienteQuatro = new Cliente(null, "Cliente QUATRO", "clientequatro@mail.com", "44555666000144", TipoCliente.PESSOAJURIDICA);
+		Cliente clienteUm = new Cliente(null, "Cliente UM", "clienteum@mail.com", "11122233344", TipoCliente.PESSOAFISICA, passwordEncoder.encode("senhauum"));
+		Cliente clienteDois = new Cliente(null, "Cliente DOIS", "clientedois@mail.com", "22233344455", TipoCliente.PESSOAFISICA, passwordEncoder.encode("senhaudois"));
+		Cliente clienteTres = new Cliente(null, "Cliente TRES", "clientetres@mail.com", "33444555000166", TipoCliente.PESSOAJURIDICA, passwordEncoder.encode("senhautres"));
+		Cliente clienteQuatro = new Cliente(null, "Cliente QUATRO", "clientequatro@mail.com", "44555666000144", TipoCliente.PESSOAJURIDICA, passwordEncoder.encode("senhauquatro"));
 		
 		clienteUm.getTelefone().addAll(Arrays.asList("911111111", "912121212"));
 		clienteDois.getTelefone().addAll(Arrays.asList("922222222", "923232323"));
