@@ -29,6 +29,7 @@ import com.mariopalmeira.cursojava.domain.PagamentoCartao;
 import com.mariopalmeira.cursojava.domain.Pedido;
 import com.mariopalmeira.cursojava.domain.Produto;
 import com.mariopalmeira.cursojava.domain.enums.EstadoPagamento;
+import com.mariopalmeira.cursojava.domain.enums.Perfil;
 import com.mariopalmeira.cursojava.domain.enums.TipoCliente;
 
 @Service
@@ -129,6 +130,8 @@ public class DBService {
 		clienteDois.getTelefone().addAll(Arrays.asList("922222222", "923232323"));
 		clienteTres.getTelefone().addAll(Arrays.asList("933333333", "934343434"));
 		clienteQuatro.getTelefone().addAll(Arrays.asList("944444444", "945454545"));
+		
+		clienteDois.addPerfil(Perfil.ADMIN);
 		
 		Endereco enderecoUm = new Endereco(null, "Rua Um", "111", null, "Bairro Um", "01111001", clienteUm, cidadeUm);
 		Endereco enderecoDois = new Endereco(null, "Rua Dois", "222", null, "Bairro Dois", "02221002", clienteDois, cidadeDois);

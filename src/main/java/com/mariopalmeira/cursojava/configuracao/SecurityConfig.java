@@ -30,7 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] LINKS_SOMENTE_LEITURA = {
 			"/produtos/**",
-			"/categorias/**"
+			"/categorias/**",
+			"/clientes/**"
 	};	
 	
 	@Override
