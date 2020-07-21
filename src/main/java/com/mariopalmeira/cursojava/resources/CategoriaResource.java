@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,12 +30,14 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
 		Optional<Categoria> categoria = categoriaService.buscar(id);
 		return ResponseEntity.ok().body(categoria);
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> incluir(@Valid @RequestBody CategoriaDTO categoriaDto){
 		//Converte objeto DTO em objeto
@@ -44,6 +47,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")	
 	@RequestMapping(value = "/{id}", method=RequestMethod.PUT)
 	public ResponseEntity<Void> editar(@Valid @RequestBody CategoriaDTO categoriaDto, @PathVariable Integer id){
 		Categoria categoria = categoriaService.categoriaDtoEmCategoria(categoriaDto);
@@ -52,6 +56,7 @@ public class CategoriaResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")	
 	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> excluir(@PathVariable Integer id){
 		categoriaService.excluir(id);

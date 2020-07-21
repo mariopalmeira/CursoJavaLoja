@@ -24,7 +24,7 @@ public class UsuarioSS implements UserDetails{
 		this.id = id;
 		this.email = email;
 		this.senha = senha;
-		//GrantedAuthority armazena strings das descrições dos perfis
+		//GrantedAuthority armazena as strings das descrições dos perfis
 		this.credenciais = credenciais.stream().map(credencial -> new SimpleGrantedAuthority(credencial.getDescricao())).collect(Collectors.toList());
 	}
 	
@@ -65,6 +65,10 @@ public class UsuarioSS implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	public boolean temPerfil(Perfil perfil) {
+		return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao())); 
 	}
 
 }

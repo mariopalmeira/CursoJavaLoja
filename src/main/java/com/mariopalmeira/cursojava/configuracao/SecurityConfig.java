@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,7 @@ import com.mariopalmeira.cursojava.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
@@ -42,9 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] LINKS_SOMENTE_LEITURA = {
 			"/produtos/**",
-			"/categorias/**",
-			"/clientes/**"
+			"/categorias/**"
 	};	
+	
+	private static final String[] LINKS_SOMENTE_POST = {
+			"/clientes/**"	
+	};
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception{
@@ -59,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		//já que a aplicação não usa sessão
 		http.cors().and().csrf().disable();
 		//Das requisições que vierem, se forem iguais as contididas em LINKS_SOMENTE_LEITURA só permita GET, se forem iguais as que estão em LINKS_PUBLICOS, deixe passar, as demais autentique
-		http.authorizeRequests().antMatchers(HttpMethod.GET, LINKS_SOMENTE_LEITURA).permitAll().antMatchers(LINKS_PUBLICOS).permitAll().anyRequest().authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, LINKS_SOMENTE_POST).permitAll().antMatchers(HttpMethod.GET, LINKS_SOMENTE_LEITURA).permitAll().antMatchers(LINKS_PUBLICOS).permitAll().anyRequest().authenticated();
 		//Adicionando filtro de autenticação
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 		//Adicionando filtro de autorização

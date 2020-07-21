@@ -17,9 +17,12 @@ import com.mariopalmeira.cursojava.dao.EnderecoDAO;
 import com.mariopalmeira.cursojava.domain.Cidade;
 import com.mariopalmeira.cursojava.domain.Cliente;
 import com.mariopalmeira.cursojava.domain.Endereco;
+import com.mariopalmeira.cursojava.domain.enums.Perfil;
 import com.mariopalmeira.cursojava.domain.enums.TipoCliente;
 import com.mariopalmeira.cursojava.dto.ClienteDTO;
 import com.mariopalmeira.cursojava.dto.ClienteInsereDTO;
+import com.mariopalmeira.cursojava.security.UsuarioSS;
+import com.mariopalmeira.cursojava.services.exception.AuthorizationException;
 import com.mariopalmeira.cursojava.services.exception.DataIntegrityException;
 import com.mariopalmeira.cursojava.services.exception.ObjectNotFoundException;
 
@@ -36,6 +39,12 @@ public class ClienteService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	public Optional<Cliente> buscaPorId(Integer id){
+		
+		UsuarioSS usuarioSS = UsuarioService.usuarioLogado();
+		if(usuarioSS == null || !usuarioSS.temPerfil(Perfil.ADMIN) && !id.equals(usuarioSS.getId())) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		
 		Optional<Cliente> cliente = clienteDAO.findById(id);
 		return Optional.of(cliente.orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado.")));
 	}
