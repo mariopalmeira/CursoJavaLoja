@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.mariopalmeira.cursojava.dao.ItemPedidoDAO;
@@ -17,6 +20,8 @@ import com.mariopalmeira.cursojava.domain.PagamentoBoleto;
 import com.mariopalmeira.cursojava.domain.Pedido;
 import com.mariopalmeira.cursojava.domain.Produto;
 import com.mariopalmeira.cursojava.domain.enums.EstadoPagamento;
+import com.mariopalmeira.cursojava.security.UsuarioSS;
+import com.mariopalmeira.cursojava.services.exception.AuthorizationException;
 import com.mariopalmeira.cursojava.services.exception.ObjectNotFoundException;
 
 @Service
@@ -87,5 +92,21 @@ public class PedidoService {
 		itemPedidoDAO.saveAll(pedido.getItemPedido());
 		System.out.println(pedido);
 		return pedido;
+	}
+	
+	public Page<Pedido> paginarPorCliente(Integer pagina, Integer porPagina, String ordem, String direcao){
+		UsuarioSS usuarioSS = UsuarioService.usuarioLogado();
+		if(usuarioSS == null) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		
+		PageRequest page = PageRequest.of(pagina, porPagina, Direction.valueOf(direcao), ordem);
+		Optional<Cliente> clienteOptional = clienteService.buscaPorId(usuarioSS.getId());
+		Cliente cliente = null;
+		if(clienteOptional.isPresent()) {
+			cliente = clienteOptional.get();
+		}
+		
+		return (Page<Pedido>) pedidoDAO.findByCliente(cliente, page);
 	}
 }
