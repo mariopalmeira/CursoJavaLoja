@@ -1,5 +1,6 @@
 package com.mariopalmeira.cursojava.resources;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mariopalmeira.cursojava.domain.Cliente;
@@ -78,5 +80,11 @@ public class ClienteResource {
 		Page<Cliente> clientes = clienteService.paginar(pagina, porPagina, ordem, direcao);
 		Page<ClienteDTO> paginas = clientes.map(cliente -> new ClienteDTO(cliente));
 		return ResponseEntity.ok().body(paginas);
+	}
+	
+	@RequestMapping(value="imagem", method=RequestMethod.POST)
+	public ResponseEntity<Void> enviarImagem(@RequestParam(name="arquivo") MultipartFile arquivo) throws IOException{
+		URI uri = clienteService.enviarImagem(arquivo);
+		return ResponseEntity.created(uri).build();
 	}
 }

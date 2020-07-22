@@ -1,5 +1,7 @@
 package com.mariopalmeira.cursojava.services;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mariopalmeira.cursojava.dao.ClienteDAO;
 import com.mariopalmeira.cursojava.dao.EnderecoDAO;
@@ -37,6 +40,9 @@ public class ClienteService {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	public Optional<Cliente> buscaPorId(Integer id){
 		
@@ -106,6 +112,10 @@ public class ClienteService {
 			cliente.getTelefone().add(clienteInsereDTO.getTelefoneTres());
 		}
 		return cliente;
+	}
+	
+	public URI enviarImagem(MultipartFile arquivo) throws IOException {
+		return s3Service.enviarArquivo(arquivo);
 	}
 	
 }
