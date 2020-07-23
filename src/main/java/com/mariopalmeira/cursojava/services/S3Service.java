@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -38,22 +37,35 @@ public class S3Service {
 //		}
 //	}
 
-	public URI enviarArquivo(MultipartFile arquivo) throws IOException{
-		try {
-			//Nome do arquivo
-			String nome = arquivo.getOriginalFilename();
-			//Tipo de arquivo 
-			String tipo = arquivo.getContentType();
-			//Os dados
-			InputStream inputStream = arquivo.getInputStream();
-			
-			ObjectMetadata metaData = new ObjectMetadata();
-			metaData.setContentType(tipo);
-			//s3Client.putObject(bucketName, key, input, metadata)
-			s3Client.putObject(bucket, nome, inputStream, metaData);
-			return s3Client.getUrl(bucket, nome).toURI();
-		} catch (URISyntaxException e) {
-			throw new FileException("Amazon Falhou!"); 
-		}
+//	public URI enviarArquivo(MultipartFile arquivo) throws IOException{
+//		try {
+//			//Nome do arquivo
+//			String nome = arquivo.getOriginalFilename();
+//			//Tipo de arquivo 
+//			String tipo = arquivo.getContentType();
+//			//Os dados
+//			InputStream inputStream = arquivo.getInputStream();
+//			
+//			ObjectMetadata metaData = new ObjectMetadata();
+//			metaData.setContentType(tipo);
+//			//s3Client.putObject(bucketName, key, input, metadata)
+//			s3Client.putObject(bucket, nome, inputStream, metaData);
+//			return s3Client.getUrl(bucket, nome).toURI();
+//		} catch (URISyntaxException e) {
+//			throw new FileException("Amazon Falhou!"); 
+//		}
+//	}
+	
+	
+	public URI enviarArquivo(InputStream inputStream, String nomeArquivo, String contentType) throws IOException{
+	try {
+		ObjectMetadata metaData = new ObjectMetadata();
+		metaData.setContentType(contentType);
+		//s3Client.putObject(bucketName, key, input, metadata)
+		s3Client.putObject(bucket, nomeArquivo, inputStream, metaData);
+		return s3Client.getUrl(bucket, nomeArquivo).toURI();
+	} catch (URISyntaxException e) {
+		throw new FileException("Amazon Falhou!"); 
 	}
+}	
 }

@@ -1,11 +1,14 @@
 package com.mariopalmeira.cursojava.services;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +46,12 @@ public class ClienteService {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	private ImageService imageService;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefixoArquivoCliente;
 	
 	public Optional<Cliente> buscaPorId(Integer id){
 		
@@ -115,20 +124,18 @@ public class ClienteService {
 	}
 	
 	public URI enviarImagem(MultipartFile arquivo) throws IOException {
-		URI uri = s3Service.enviarArquivo(arquivo);
-		
 		UsuarioSS usuarioSS = UsuarioService.usuarioLogado();
 		if(usuarioSS == null) {
 			throw new AuthorizationException("Acesso Negado!");
 		}
 		
-		Optional<Cliente> clienteOptional = clienteDAO.findById(usuarioSS.getId());
-		if(clienteOptional.isPresent()) {
-			Cliente cliente = clienteOptional.get();
-			cliente.setImgUrl(uri.toString());
-			clienteDAO.save(cliente);
-		}
-		return uri;
+		//Convertendo Multipart em BufferedImage
+		BufferedImage imagem = imageService.getJpgImageFromFile(arquivo);
+		//Convertendo o Buffered em JPG e InputStream
+		InputStream inputStream = imageService.bufferedEmInputStream(imagem, "jpg");
+		String nomeArquivo = prefixoArquivoCliente + "_" + usuarioSS.getId() + ".jpg";
+		String contentType = "image";
+		return s3Service.enviarArquivo(inputStream, nomeArquivo, contentType);
 	}
 	
 }
