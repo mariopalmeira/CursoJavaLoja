@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.mariopalmeira.cursojava.services.exception.FileException;
 
 @Service
 public class S3Service {
@@ -52,7 +53,7 @@ public class S3Service {
 			s3Client.putObject(bucket, nome, inputStream, metaData);
 			return s3Client.getUrl(bucket, nome).toURI();
 		} catch (URISyntaxException e) {
-			throw new RuntimeException("Amazon Falhou!"); 
+			throw new FileException("Amazon Falhou!"); 
 		}
 	}
 }

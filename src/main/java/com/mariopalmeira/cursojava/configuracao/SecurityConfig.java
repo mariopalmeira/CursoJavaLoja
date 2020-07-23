@@ -49,7 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	private static final String[] LINKS_SOMENTE_POST = {
 			"/clientes",
-			"/clientes/imagem",
 			"/auth/esqueci_minha_senha"
 	};
 	

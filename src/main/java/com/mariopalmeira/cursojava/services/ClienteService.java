@@ -115,7 +115,20 @@ public class ClienteService {
 	}
 	
 	public URI enviarImagem(MultipartFile arquivo) throws IOException {
-		return s3Service.enviarArquivo(arquivo);
+		URI uri = s3Service.enviarArquivo(arquivo);
+		
+		UsuarioSS usuarioSS = UsuarioService.usuarioLogado();
+		if(usuarioSS == null) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		
+		Optional<Cliente> clienteOptional = clienteDAO.findById(usuarioSS.getId());
+		if(clienteOptional.isPresent()) {
+			Cliente cliente = clienteOptional.get();
+			cliente.setImgUrl(uri.toString());
+			clienteDAO.save(cliente);
+		}
+		return uri;
 	}
 	
 }
