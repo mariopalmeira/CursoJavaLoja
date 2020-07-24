@@ -24,29 +24,29 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(ObjectNotFoundException.class)//indica que essa classe se trata de um manipulador de exceções do OObjectNotFoundException
 	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException excecao, HttpServletRequest requisicao){
 		//Usando uma classe de erro personalizada, do meu pacote, ele vai retornar o status http, a mensagem e o momento que a exceção ocorreu
-		StandardError erro = new StandardError(HttpStatus.NOT_FOUND.value(), excecao.getMessage(), System.currentTimeMillis());
+		StandardError erro = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), "Não encontrado", excecao.getMessage(), requisicao.getRequestURI());
 		//O status do retorno vai ser 404 e no corpo as informações da exceção
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
 	}
 	
 	@ExceptionHandler(DataIntegrityException.class)
 	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException excecao, HttpServletRequest requisicao){
-		StandardError erro = new StandardError(HttpStatus.BAD_REQUEST.value(), excecao.getMessage(), System.currentTimeMillis());
+		StandardError erro = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Integridade de dados", excecao.getMessage(), requisicao.getRequestURI());		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<StandardError> argumentNotValid(MethodArgumentNotValidException excecao, HttpServletRequest requisicao){
-		ValidationError erro = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Validação de campos", System.currentTimeMillis());
+		ValidationError erro = new ValidationError(System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), "Validação de campos", excecao.getMessage(), requisicao.getRequestURI());;	
 		for(FieldError x : excecao.getBindingResult().getFieldErrors()) {
 			erro.setErros(x.getField(), x.getDefaultMessage());
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
 	}
 	
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<StandardError> authorizationException(AuthorizationException excecao, HttpServletRequest requisicao){
-		StandardError erro = new StandardError(HttpStatus.FORBIDDEN.value(), excecao.getMessage(), System.currentTimeMillis());
+	public ResponseEntity<StandardError> authorizationException(AuthorizationException excecao, HttpServletRequest requisicao){		
+		StandardError erro = new StandardError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Acesso negado!", excecao.getMessage(), requisicao.getRequestURI());		
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
 	}	
 }

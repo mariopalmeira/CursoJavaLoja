@@ -3,17 +3,29 @@ package com.mariopalmeira.cursojava.resources.exception;
 import java.io.Serializable;
 
 public class StandardError implements Serializable{
-
 	private static final long serialVersionUID = 1L;
-	private Integer status;
-	private String mensagem;
-	private Long timeStamp;
 	
-	public StandardError(Integer status, String mensagem, Long timeStamp) {
+	private Long timestamp;
+	private Integer status;
+	private String error;
+	private String mensage;
+	private String path;
+	
+	public StandardError(Long timestamp, Integer status, String error, String mensage, String path) {
 		super();
+		this.timestamp = timestamp;
 		this.status = status;
-		this.mensagem = mensagem;
-		this.timeStamp = timeStamp;
+		this.error = error;
+		this.mensage = mensage;
+		this.path = path;
+	}
+
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public Integer getStatus() {
@@ -24,21 +36,27 @@ public class StandardError implements Serializable{
 		this.status = status;
 	}
 
-	public String getMensagem() {
-		return mensagem;
+	public String getError() {
+		return error;
 	}
 
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
+	public void setError(String error) {
+		this.error = error;
 	}
 
-	public Long getTimeStamp() {
-		return timeStamp;
+	public String getMensage() {
+		return mensage;
 	}
 
-	public void setTimeStamp(Long timeStamp) {
-		this.timeStamp = timeStamp;
+	public void setMensage(String mensage) {
+		this.mensage = mensage;
 	}
-	
-	
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
 }
