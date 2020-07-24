@@ -138,4 +138,13 @@ public class ClienteService {
 		return s3Service.enviarArquivo(inputStream, nomeArquivo, contentType);
 	}
 	
+	public Cliente buscaPorEmail() {
+		UsuarioSS usuarioSS = UsuarioService.usuarioLogado();
+		if(usuarioSS == null) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		
+		Cliente cliente = clienteDAO.findByEmail(usuarioSS.getUsername());
+		return cliente;
+	}
 }

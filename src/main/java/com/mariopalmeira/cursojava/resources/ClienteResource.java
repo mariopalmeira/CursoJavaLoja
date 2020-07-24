@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,9 +83,15 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(paginas);
 	}
 	
-	@RequestMapping(value="imagem", method=RequestMethod.POST)
+	@RequestMapping(value="/imagem", method=RequestMethod.POST)
 	public ResponseEntity<Void> enviarImagem(@RequestParam(name="arquivo") MultipartFile arquivo) throws IOException{
 		URI uri = clienteService.enviarImagem(arquivo);
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@RequestMapping(value="/cliente_por_email", method=RequestMethod.GET)
+	public ResponseEntity<Cliente> buscarPorEmail(HttpServletResponse response){
+		Cliente cliente = clienteService.buscaPorEmail();
+		return ResponseEntity.ok().body(cliente);
 	}
 }
