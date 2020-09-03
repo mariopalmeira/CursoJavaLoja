@@ -79,4 +79,16 @@ public class ClienteResource {
 		Page<ClienteDTO> paginas = clientes.map(cliente -> new ClienteDTO(cliente));
 		return ResponseEntity.ok().body(paginas);
 	}
+	
+//	@RequestMapping(value="/email", method=RequestMethod.GET)
+//	public ResponseEntity<ClienteDTO> buscaClientePorEmail(@RequestParam(name="email", defaultValue="") String email) {
+//		ClienteDTO clienteDTO = clienteService.buscaClientePorEmail(email);
+//		return ResponseEntity.ok().body(clienteDTO);
+//	}
+	
+	@RequestMapping(value="/email", method=RequestMethod.GET)
+	public ResponseEntity<Cliente> buscaClientePorEmail(@RequestParam(name="email", defaultValue="") String email) {
+		Cliente cliente = clienteService.buscaClientePorEmail(email);
+		return ResponseEntity.ok().body(cliente);
+	}
 }

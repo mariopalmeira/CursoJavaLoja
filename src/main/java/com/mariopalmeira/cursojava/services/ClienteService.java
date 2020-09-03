@@ -108,4 +108,22 @@ public class ClienteService {
 		return cliente;
 	}
 	
+//	public ClienteDTO buscaClientePorEmail(String email) {
+//		System.out.println("***///***");
+//		System.out.println(email);
+//		System.out.println("***///***");
+//		Cliente cliente = clienteDAO.findByEmail(email);
+//		ClienteDTO clienteDTO = new ClienteDTO(cliente);
+//		return clienteDTO;
+//	}
+	
+	public Cliente buscaClientePorEmail(String email) {
+		System.out.println("***///***");
+		System.out.println(email);
+		System.out.println("***///***");
+		Cliente cliente = clienteDAO.findByEmail(email);
+		//ClienteDTO clienteDTO = new ClienteDTO(cliente);
+		return cliente;
+	}
+	
 }

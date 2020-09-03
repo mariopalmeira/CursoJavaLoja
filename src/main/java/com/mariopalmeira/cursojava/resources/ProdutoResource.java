@@ -24,10 +24,16 @@ public class ProdutoResource {
 	@Autowired
 	private ProdutoService produtoService;
 	
+//	@RequestMapping(value="/{id}", method=RequestMethod.GET)
+//	public ResponseEntity<?> buscaProdutos(@PathVariable Integer id){
+//		Optional<Produto> produto = produtoService.buscaPorId(id);
+//		return ResponseEntity.ok().body(produto);
+//	}
+	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> buscaProdutos(@PathVariable Integer id){
-		Optional<Produto> produto = produtoService.buscaPorId(id);
-		return ResponseEntity.ok().body(produto);
+		ProdutoDTO produtoDTO = produtoService.buscaPorId(id);
+		return ResponseEntity.ok().body(produtoDTO);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)

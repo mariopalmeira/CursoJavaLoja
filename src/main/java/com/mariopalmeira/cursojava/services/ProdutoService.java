@@ -13,6 +13,7 @@ import com.mariopalmeira.cursojava.dao.CategoriaDAO;
 import com.mariopalmeira.cursojava.dao.ProdutoDAO;
 import com.mariopalmeira.cursojava.domain.Categoria;
 import com.mariopalmeira.cursojava.domain.Produto;
+import com.mariopalmeira.cursojava.dto.ProdutoDTO;
 
 @Service
 public class ProdutoService {
@@ -23,9 +24,20 @@ public class ProdutoService {
 	@Autowired
 	private CategoriaDAO categoriaDao;	
 	
-	public Optional<Produto> buscaPorId(Integer id){
-		Optional<Produto> produto = produtoDAO.findById(id);
-		return produto;
+//	public Optional<Produto> buscaPorId(Integer id){
+//		Optional<Produto> produto = produtoDAO.findById(id);
+//		return produto;
+//	}
+	
+	public ProdutoDTO buscaPorId(Integer id){
+		Optional<Produto> produtoOptional = produtoDAO.findById(id);
+		Produto produto = null;
+		ProdutoDTO produtoDTO = null;
+		if(produtoOptional.isPresent()) {
+			produto = produtoOptional.get();
+			produtoDTO = new ProdutoDTO(produto);
+		}
+		return produtoDTO;
 	}
 	
 	public Page<Produto> busca(String nome, List<Integer> ids, Integer pagina, Integer porPagina, String ordem, String direcao){
